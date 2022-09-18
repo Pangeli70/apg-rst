@@ -12,5 +12,6 @@ export { eApgRstErrorCodes } from "./src/enums/eApgRstErrorCodes.ts";
 
 export { ApgRst } from "./src/classes/ApgRst.ts";
 export { ApgRstErrors } from "./src/classes/ApgRstErrors.ts";
+export { ApgRstAssert } from "./src/classes/ApgRstAssert.ts";
 
 
