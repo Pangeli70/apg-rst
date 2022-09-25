@@ -6,7 +6,7 @@
  * @version 0.7.0 [APG 2019/08/15]
  * @version 0.7.1 [APG 2019/08/27]
  * @version 0.8.0 [APG 2022/03/12] Porting to Deno
- * @version 0.9.1 [APG 2022/09/18] Deno Deploy
+ * @version 0.9.1 [APG 2022/09/18] Github beta
  * -----------------------------------------------------------------------
  */
 import { Uts } from '../../deps.ts';
@@ -77,13 +77,11 @@ export class ApgRst {
 
   /** @Immutable result*/
   get AsIApgRst() {
-    const r: IApgRst = {
-      error: this.error,
-      message: this.message,
-      codedMessage: this.codedMessage,
-      payload: this.payload
-    }
-    return Uts.ApgUtsObj.DeepFreeze(r) as IApgRst;
+    return Uts.ApgUtsObj.DeepCopy(this) as IApgRst;
+  }
+
+  get AsImmutableIApgRst() {
+    return Uts.ApgUtsObj.DeepFreeze(this) as IApgRst;
   }
 
   static ExtractPayload(asignature: string, ar: IApgRst) {
