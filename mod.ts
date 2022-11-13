@@ -11,6 +11,7 @@ export type { IApgRstCodedMessage } from "./src/interfaces/IApgRstCodedMessage.t
 export { eApgRstErrorCodes } from "./src/enums/eApgRstErrorCodes.ts";
 
 export { ApgRst } from "./src/classes/ApgRst.ts";
+export { ApgRstPayload } from "./src/classes/ApgRstPayload.ts";
 export { ApgRstErrors } from "./src/classes/ApgRstErrors.ts";
 export { ApgRstAssert } from "./src/classes/ApgRstAssert.ts";
 
