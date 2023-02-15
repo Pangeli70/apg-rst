@@ -4,6 +4,7 @@
  * @version 0.7.0 [APG 2019/08/15]
  * @version 0.8.0 [APG 2022/03/12] Porting to Deno
  * @version 0.9.1 [APG 2022/09/18] Github beta
+ * @version 0.9.5 [APG 2023/02/14] General simplification
  * -----------------------------------------------------------------------
  */
 

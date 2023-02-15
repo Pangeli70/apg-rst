@@ -6,10 +6,10 @@
  * @version 0.7.0 [APG 2019/08/15]
  * @version 0.8.0 [APG 2022/03/12] Porting to Deno
  * @version 0.9.1 [APG 2022/09/18] Github beta
+ * @version 0.9.5 [APG 2023/02/14] General simplification
  * -----------------------------------------------------------------------
  */
-import { eApgRstErrorCodes } from '../enums/eApgRstErrorCodes.ts';
-import { IApgRstCodedMessage } from '../interfaces/IApgRstCodedMessage.ts';
+import { TApgRstCodedMessageId } from "../types/TApgRst.ts";
 import { IApgRstPayload } from './IApgRstPayload.ts';
 
 
@@ -18,12 +18,14 @@ import { IApgRstPayload } from './IApgRstPayload.ts';
  */
 export interface IApgRst {
 
-  /** Internal error code */
-  error?: eApgRstErrorCodes;
-  /** Details of the result ready to be logged and that don't need translation*/
+  /** Result */
+  ok: boolean;
+  /** Message template supports placeholders for parameters */
   message?: string;
+  /** Parameters values to be used to fill the placeholders in message */
+  params?: string[];
   /** Additional data to describe successful or error operations  */
   payload?: IApgRstPayload;
-  /** Templateized message with multilanguage support */
-  codedMessage?: IApgRstCodedMessage;
+  /** Code message for multilanguage support */
+  codedMessageId?: TApgRstCodedMessageId;
 }

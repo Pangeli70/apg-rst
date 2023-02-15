@@ -3,31 +3,34 @@
  * @author [APG] ANGELI Paolo Giusto
  * @version 0.8.0 [APG 2022/08/09]
  * @version 0.9.1 [APG 2022/09/18] Github beta
+ * @version 0.9.5 [APG 2023/02/14] General simplification
  * -----------------------------------------------------------------------
  */
 
 import { Uts } from "../../deps.ts";
-import { eApgRstErrorCodes } from "../enums/eApgRstErrorCodes.ts";
-import { ApgRst } from "./ApgRst.ts";
+import { IApgRst } from "../interfaces/IApgRst.ts";
 import { ApgRstErrors } from "./ApgRstErrors.ts";
 
-
+/**
+ * Check for unrecoverable errors in Apg Exosystem
+ */
 export class ApgRstAssert {
 
-    static IsNotOk(achecked: ApgRst, amessage: string, athrow = false) {
-        let r = new ApgRst();
-        if (!achecked.Ok) {
+    static IsNotOk(achecked: IApgRst, amessage: string, athrow = false) {
+
+        let r: IApgRst = { ok: true };
+
+        if (!achecked.ok) {
 
             const title = 'ASSERTED ERROR RESULT ! ';
-            r = ApgRstErrors.Coded(
-                eApgRstErrorCodes.notAValidValue,
-                "",
+
+            r = ApgRstErrors.Simple(
                 title + amessage
             );
 
-            ApgRstAssert.#console(title, amessage);
+            this.#console(title, amessage);
 
-            console.dir(achecked.AsIApgRst);
+            console.dir(achecked);
 
             if (athrow) {
                 throw new Error(amessage);
@@ -37,20 +40,23 @@ export class ApgRstAssert {
 
     }
 
-    static IsUndefined(achecked: unknown | undefined, amessage: string, athrow = false) {
+    static IsUndefined(
+        achecked: unknown | undefined,
+        amessage: string,
+        athrow = false
+    ) {
 
-        let r = new ApgRst();
+        let r: IApgRst = { ok: true };
 
         if (achecked === undefined) {
 
             const title = 'ASSERTED UNDEFINED ! ';
-            r = ApgRstErrors.Coded(
-                eApgRstErrorCodes.notAValidValue,
-                "",
+
+            r = ApgRstErrors.Simple(
                 title + amessage
             );
 
-            ApgRstAssert.#console(title, amessage);
+            this.#console(title, amessage);
 
             if (athrow) {
                 throw new Error(amessage);
@@ -62,17 +68,18 @@ export class ApgRstAssert {
 
 
     static IsFalse(achecked: boolean, amessage: string, athrow = false) {
-        let r = new ApgRst();
+
+        let r: IApgRst = { ok: true };
+
         if (achecked === false) {
 
             const title = 'ASSERTED FALSE ! ';
-            r = ApgRstErrors.Coded(
-                eApgRstErrorCodes.notAValidValue,
-                "",
+
+            r = ApgRstErrors.Simple(
                 title + amessage
             );
 
-            ApgRstAssert.#console(title, amessage);
+            this.#console(title, amessage);
 
             if (athrow) {
                 throw new Error(amessage);
@@ -82,11 +89,18 @@ export class ApgRstAssert {
     }
 
     static IsTrue(achecked: boolean, amessage: string, athrow = false) {
-        const r = new ApgRst();
-        if (achecked === true) {
-            const title = ('ASSERTED TRUE ! ');
 
-            ApgRstAssert.#console(title, amessage);
+        let r: IApgRst = { ok: true };
+
+        if (achecked === true) {
+
+            const title = 'ASSERTED TRUE ! ';
+
+            r = ApgRstErrors.Simple(
+                title + amessage
+            );
+
+            this.#console(title, amessage);
 
             if (athrow) {
                 throw new Error(amessage);

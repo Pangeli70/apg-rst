@@ -7,130 +7,87 @@
  * @version 0.7.1 [APG 2019/08/27]
  * @version 0.8.0 [APG 2022/03/12] Porting to Deno
  * @version 0.9.1 [APG 2022/09/18] Github beta
+ * @version 0.9.5 [APG 2023/02/14] General simplification
  * -----------------------------------------------------------------------
  */
-import { Uts } from '../../deps.ts';
-import { eApgRstErrorCodes } from '../enums/eApgRstErrorCodes.ts';
-import { IApgRstCodedMessage } from '../interfaces/IApgRstCodedMessage.ts';
 
 import { IApgRst } from '../interfaces/IApgRst.ts';
-import { IApgRstPayload } from '../interfaces/IApgRstPayload.ts';
-
 
 /** 
- * Internal operations result for the Apg Ecosystem, carries informations about errors and data
+ * Manipulator of result data in ApgEcosystem
  */
 export class ApgRst {
 
-  private error: eApgRstErrorCodes;
-  private message?: string;
-  private payload?: IApgRstPayload;
-  private codedMessage?: IApgRstCodedMessage;
 
-  get Ok() {
-    return this.error == eApgRstErrorCodes.noError;
-  }
+  static ExtractPayload(ares: IApgRst, asignature: string): unknown | IApgRst {
 
-  constructor(ares?: IApgRst) {
-    this.error = eApgRstErrorCodes.noError;
-    if (ares) {
-      if (ares.error) {
-        this.error = ares.error;
-      }
-      if (ares.message) {
-        this.message = ares.message;
-      }
-      if (ares.codedMessage) {
-        this.codedMessage = ares.codedMessage;
-      }
-      if (ares.payload) {
-        this.payload = ares.payload;
-      }
-    }
-  }
-
-  getPayload(asignature: string) {
-
-    if (!this.payload) {
-      throw new Error(`Payload is missing. Impossible to extract data from result`);
+    const r: IApgRst = {
+      ok: true
     }
 
-    if (!this.payload.signature) {
-      throw new Error(`Payload signature is missing. Impossible to check and extract data from result`);
+    if (!ares.payload) {
+      r.ok = false;
+      r.message = `Payload is missing. Impossible to extract data from result`;
     }
-
-    if (this.payload.signature !== asignature) {
-      throw new Error(
+    else if (!ares.payload.signature) {
+      r.ok = false;
+      r.message = `Payload signature is missing. Impossible to check and extract data from result`;
+    }
+    else if (ares.payload.signature !== asignature) {
+      r.ok = false;
+      r.message =
         `Payload has wrong signature: ` +
-        `expected[${asignature}], got[${this.payload.signature}].` +
+        `expected[%1], got[%2].` +
         `Impossible to extract data from result.`
-      );
+      r.params = [asignature, ares.payload.signature]
+    }
+    else { 
+      return ares.payload.data;
     }
 
-    return this.payload.data;
+    return r;
 
   }
 
-  setPayload(apayload: IApgRstPayload) {
-    this.payload = apayload;
-  }
 
-  /** @Immutable result*/
-  get AsIApgRst() {
-    return Uts.ApgUtsObj.DeepCopy(this) as IApgRst;
-  }
 
-  get AsImmutableIApgRst() {
-    return Uts.ApgUtsObj.DeepFreeze(this) as IApgRst;
-  }
-
-  static ExtractPayload(asignature: string, ar: IApgRst) {
-
-    if (!ar.payload) {
-      throw new Error(`Payload is missing. Impossible to extract data from result`);
-    }
-
-    if (!ar.payload.signature) {
-      throw new Error(`Payload signature is missing. Impossible to check and extract data from result`);
-    }
-
-    if (ar.payload.signature !== asignature) {
-      throw new Error(
-        `Payload has wrong signature: ` +
-        `expected[${asignature}], got[${ar.payload.signature}].` +
-        `Impossible to extract data from result.`
-      );
-    }
-
-    return ar.payload.data;
-
-  }
-
-  messageFromTemplate(
-    aparams: string[]
+  static InterpolateMessage(
+    ares: IApgRst,
+    aparams?: string[]
   ): string {
 
     let r = "";
-    
-    if (this.codedMessage && this.codedMessage.template) {
+
+    if (ares.message) {
       let i = 1;
-      r = this.codedMessage.template;
+      r = ares.message;
 
       const placeholdersN = (r.match(/\[%.\]/g) || []).length;
 
-      aparams.forEach(param => {
+      let params: string[];
+      if (aparams != undefined) {
+        params = aparams;
+      }
+      else if (ares.params != undefined) {
+        params = ares.params
+      }
+      else { 
+        params = [];
+      }
+
+      params.forEach(param => {
         const placeholder = `[%${i}]`;
         r = r.replace(placeholder, param);
         i++;
       });
 
-      if (placeholdersN != aparams.length) {
-        r += `\nWarning! The number of placeholders [${placeholdersN}] doesn't match the number of parameters [${aparams.length}].`
+      if (placeholdersN != params.length) {
+        r += `\nWarning! The number of placeholders [${placeholdersN}] doesn't match the number of parameters [${params.length}].`
       }
 
     }
-    else  { 
-      r = "Error this result hasn't a valid coded message template."
+    else {
+      r = "Interpolation error! This result hasn't a valid message template."
     }
     return r;
   }
