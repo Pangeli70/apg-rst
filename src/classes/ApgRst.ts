@@ -19,7 +19,7 @@ import { IApgRst } from '../interfaces/IApgRst.ts';
 export class ApgRst {
 
 
-  static ExtractPayload(ares: IApgRst, asignature: string): unknown | IApgRst {
+  static ExtractPayload(ares: IApgRst, asignature: string):  IApgRst | unknown {
 
     const r: IApgRst = {
       ok: true
