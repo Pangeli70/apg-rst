@@ -8,6 +8,7 @@
  * @version 0.8.0 [APG 2022/03/12] Porting to Deno
  * @version 0.9.1 [APG 2022/09/18] Github beta
  * @version 0.9.5 [APG 2023/02/14] General simplification
+ * @version 0.9.6 [APG 2023/03/26] Refactoring of ExtractPayload to CheckPayload
  * -----------------------------------------------------------------------
  */
 
@@ -19,7 +20,7 @@ import { IApgRst } from '../interfaces/IApgRst.ts';
 export class ApgRst {
 
 
-  static ExtractPayload(ares: IApgRst, asignature: string):  IApgRst | unknown {
+  static CheckPayload(ares: IApgRst, asignature: string):  IApgRst {
 
     const r: IApgRst = {
       ok: true
@@ -27,22 +28,22 @@ export class ApgRst {
 
     if (!ares.payload) {
       r.ok = false;
-      r.message = `Payload is missing. Impossible to extract data from result`;
+      r.message = `Payload is missing. Impossible to check data from result payload`;
     }
     else if (!ares.payload.signature) {
       r.ok = false;
-      r.message = `Payload signature is missing. Impossible to check and extract data from result`;
+      r.message = `Payload signature is missing. Impossible to check data from result`;
     }
     else if (ares.payload.signature !== asignature) {
       r.ok = false;
       r.message =
         `Payload has wrong signature: ` +
         `expected[%1], got[%2].` +
-        `Impossible to extract data from result.`
+        `It might be impossible to extract data from payload.`
       r.params = [asignature, ares.payload.signature]
     }
     else { 
-      return ares.payload.data;
+      r.payload = ares.payload;
     }
 
     return r;

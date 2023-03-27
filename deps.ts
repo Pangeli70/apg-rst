@@ -5,4 +5,7 @@
  */
 
 // https://github
+
 export * as Uts from "https://raw.githubusercontent.com/Pangeli70/apg-uts/master/mod.ts";
+
+// export * as Uts from "../apg-uts/mod.ts";
