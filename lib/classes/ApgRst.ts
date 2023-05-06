@@ -9,10 +9,12 @@
  * @version 0.9.1 [APG 2022/09/18] Github beta
  * @version 0.9.5 [APG 2023/02/14] General simplification
  * @version 0.9.6 [APG 2023/03/26] Refactoring of ExtractPayload to CheckPayload
+ * @version 0.9.7 [APG 2023/04/25] Separation of concerns lib/srv
  * -----------------------------------------------------------------------
  */
 
 import { IApgRst } from '../interfaces/IApgRst.ts';
+import { TApgRstPayloadSignature } from "../types/TApgRst.ts";
 
 /** 
  * Manipulator of result data in ApgEcosystem
@@ -20,7 +22,7 @@ import { IApgRst } from '../interfaces/IApgRst.ts';
 export class ApgRst {
 
 
-  static CheckPayload(ares: IApgRst, asignature: string):  IApgRst {
+  static CheckPayload(ares: IApgRst, asignature: TApgRstPayloadSignature): IApgRst {
 
     const r: IApgRst = {
       ok: true
@@ -35,14 +37,22 @@ export class ApgRst {
       r.message = `Payload signature is missing. Impossible to check data from result`;
     }
     else if (ares.payload.signature !== asignature) {
+
+      let signature1 = asignature as string;
+      let signature2 = ares.payload.signature as string;
+      if (typeof (ares.payload.signature) == "symbol") {
+        signature1 = "Symbol1";
+        signature2 = "Symbol2";
+      }
+
       r.ok = false;
       r.message =
         `Payload has wrong signature: ` +
         `expected[%1], got[%2].` +
         `It might be impossible to extract data from payload.`
-      r.params = [asignature, ares.payload.signature]
+      r.params = [signature1, signature2]
     }
-    else { 
+    else {
       r.payload = ares.payload;
     }
 
@@ -72,7 +82,7 @@ export class ApgRst {
       else if (ares.params != undefined) {
         params = ares.params
       }
-      else { 
+      else {
         params = [];
       }
 

@@ -8,6 +8,7 @@
  * @version 0.9.0 [APG 2022/08/16] Code smells
  * @version 0.9.1 [APG 2022/09/18] Github beta
  * @version 0.9.5 [APG 2023/02/14] General simplification
+ * @version 0.9.7 [APG 2023/04/25] Separation of concerns lib/srv
  * -----------------------------------------------------------------------
  */
 import { IApgRst } from "../interfaces/IApgRst.ts";
