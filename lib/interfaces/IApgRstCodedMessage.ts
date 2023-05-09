@@ -18,7 +18,7 @@ import { TApgRstCodedMessageId } from "../types/TApgRst.ts";
  */
 export interface IApgRstCodedMessage {
 
-  /** Code of the message. Is used to search into the multilanguage messages dictionary*/
+  /** Code of the message. Is used to search into a multilanguage messages dictionary*/
   readonly code: TApgRstCodedMessageId;
   /** Message template with placeholders for parameters */
   readonly message?: string;
