@@ -1,5 +1,5 @@
 /** -----------------------------------------------------------------------
- * @module [Rst]
+ * @module [apg-rst]
  * @author [APG] ANGELI Paolo Giusto
  * @version 0.9.5 [APG 2023/02/14]
  * @version 0.9.6 [APG 2023/04/24] Payload signature
