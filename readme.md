@@ -2,7 +2,7 @@
 
 <br>
  
-### Utility functions for the apg ecosystem 
+### Composite results management 
 
 <br>
 
@@ -23,11 +23,11 @@ Since: **2018/06**
 ## Library 
 ---
 
-Helper entities (usually static methods) used to automate common simple operations on strings, numbers, conversions etc.  
+Entities useful to manage composite returns from method results that can carry additional informations and payloads about processing or errors. 
 
 <br>
 
-https://github.com/Pangeli70/apg-uts 
+https://github.com/Pangeli70/apg-rst 
 
 <br>
 
@@ -35,11 +35,15 @@ Import it in your deps.ts file using:
 
 <br>
 
-> export * as Uts from "https://raw.githubusercontent.com/Pangeli70/apg-uts/master/mod.ts" 
+> export * as Rst from "https://raw.githubusercontent.com/Pangeli70/apg-rst/master/mod.ts" 
 
 <br>
 
 The library has the following Apg dependencies: 
+
+<br>
+
+> [Apg-Uts](https://github.com/Pangeli70/apg-uts)
 
 <br>
 
