@@ -14,12 +14,29 @@
  */
 
 import { IApgRst } from '../interfaces/IApgRst.ts';
+import { IApgRstPayload } from "../interfaces/IApgRstPayload.ts";
 import { TApgRstPayloadSignature } from "../types/TApgRst.ts";
 
 /** 
  * Manipulator of result data in ApgEcosystem
  */
 export class ApgRst {
+
+
+  static New() {
+    return { ok: true } as IApgRst;
+  }
+
+  static NewWithPayload(asignature: string, adata: unknown) {
+    const p: IApgRstPayload = { 
+      signature: asignature,
+      data: adata
+    }
+    return {
+      ok: true,
+      payload: p
+    } as IApgRst;
+  }
 
 
   static CheckPayload(ares: IApgRst, asignature: TApgRstPayloadSignature): IApgRst {
@@ -38,11 +55,15 @@ export class ApgRst {
     }
     else if (ares.payload.signature !== asignature) {
 
-      let signature1 = asignature as string;
-      let signature2 = ares.payload.signature as string;
+      let signature1;
+      let signature2;
       if (typeof (ares.payload.signature) == "symbol") {
-        signature1 = "Symbol1";
-        signature2 = "Symbol2";
+        signature1 = asignature.toString();
+        signature2 = ares.payload.signature.toString();
+      }
+      else { 
+        signature1 = asignature as string;
+        signature2 = ares.payload.signature as string;
       }
 
       r.ok = false;
