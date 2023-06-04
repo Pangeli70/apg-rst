@@ -21,12 +21,13 @@ export interface IApgRst {
 
   /** Result */
   ok: boolean;
+  /** Additional data to describe successful or error operations*/
+  payload?: IApgRstPayload;
+  
   /** Message template supports placeholders for parameters */
   message?: string;
-  /** Parameters values to be used to fill the placeholders in message */
+  /** Parameters values to be used to fill the placeholders in coded messages */
   params?: string[];
-  /** Additional data to describe successful or error operations  */
-  payload?: IApgRstPayload;
   /** Code message for multilanguage support */
   codedMessageId?: TApgRstCodedMessageId;
 }

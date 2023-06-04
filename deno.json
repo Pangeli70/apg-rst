@@ -3,6 +3,6 @@
         "noImplicitOverride": true
     },
     "tasks":{
-        "cache": "deno cache --reload mod.ts"
+        "cacheLib": "deno cache --reload --lock-write ./lib/deps.ts"
     }
 }
